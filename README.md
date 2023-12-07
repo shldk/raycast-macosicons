@@ -2,7 +2,7 @@
 
 Raycast extension for browsing and applying icons from [macOSicons.com](https://macosicons.com)
 
-![home.jpeg](metadata/Fhome.jpeg)
+![home.jpeg](metadata/home.jpeg)
 
 There's a command to see whole your history of icon changes made through the extension. You can easily compare them side by side, revert back if you made a mistake and much more!
 
