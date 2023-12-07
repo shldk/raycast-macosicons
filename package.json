@@ -3,7 +3,7 @@
   "name": "macosicons",
   "title": "MacOSIcons.com",
   "description": "Raycast extension for browsing and applying icons from macOSicons.com",
-  "icon": "command-icon.png",
+  "icon": "main-icon.png",
   "author": "shldk",
   "categories": [
     "System",
@@ -23,7 +23,8 @@
       "title": "Icons History",
       "subtitle": "macOSicons.com",
       "description": "Show history of all icon changes performed by extension",
-      "mode": "view"
+      "mode": "view",
+      "icon": "history-icon.png"
     }
   ],
   "dependencies": {
