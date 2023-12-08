@@ -38,6 +38,23 @@ async function addToHistory(bundleId: string, icon: IconStorageItem) {
   return addEntry(`${bundleId}${DbKeys.History}`, icon);
 }
 
+async function removeFromHistory(
+  bundleId: string,
+  icon: IconStorageItem,
+): Promise<boolean> {
+  const key = `${bundleId}${DbKeys.History}`;
+  const items = await getEntry(key);
+  console.log(items);
+  console.log(icon);
+  const newItems = items.filter(
+    (item: IconStorageItem) => item.date !== icon.date,
+  );
+
+  await LocalStorage.setItem(key, JSON.stringify(newItems));
+
+  return newItems.length !== items.length;
+}
+
 async function getHistory() {
   const allItems = await getAllEntries<IconStorageItem[]>((key) =>
     key.endsWith(`${DbKeys.History}`),
@@ -53,6 +70,7 @@ async function getHistory() {
 }
 
 export const DB = {
-  addToHistory,
   getHistory,
+  addToHistory,
+  removeFromHistory,
 };
