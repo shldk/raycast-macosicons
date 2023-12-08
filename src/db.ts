@@ -44,8 +44,6 @@ async function removeFromHistory(
 ): Promise<boolean> {
   const key = `${bundleId}${DbKeys.History}`;
   const items = await getEntry(key);
-  console.log(items);
-  console.log(icon);
   const newItems = items.filter(
     (item: IconStorageItem) => item.date !== icon.date,
   );

@@ -13,7 +13,7 @@ import { DB } from "../../db";
 export type ActionProps = {
   bundleId: string;
   icon: IconStorageItem;
-  onDeleted: () => Promise<any>;
+  onDeleted: () => Promise<unknown>;
 };
 
 const RemoveHistoryItem = ({ icon, onDeleted, bundleId }: ActionProps) => {
@@ -53,7 +53,7 @@ export const HistoryActions = ({
 }: {
   icon: IconStorageItem;
   bundleId: string;
-  revalidate: () => Promise<any>;
+  revalidate: () => Promise<unknown>;
 }) => (
   <ActionPanel.Section>
     <RemoveHistoryItem bundleId={bundleId} icon={icon} onDeleted={revalidate} />
