@@ -8,12 +8,14 @@ import { COLUMNS } from "./api";
 function formatDate(dateString: string) {
   const date = new Date(dateString);
 
-  return (
-    `􀧞 ${date.toLocaleDateString(undefined, {
-      month: "2-digit",
-      day: "2-digit",
-    })} ` + `${date.toLocaleTimeString()}`
-  );
+  return `􀧞 ${date.toLocaleDateString(undefined, {
+    day: "2-digit",
+    month: "short",
+  })}, ${date.toLocaleTimeString(undefined, {
+    hour12: false,
+    hour: "2-digit",
+    minute: "2-digit",
+  })}`;
 }
 
 export default function HistoryCommand() {
