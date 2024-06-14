@@ -1,7 +1,7 @@
 import algoliasearch, { SearchIndex } from "algoliasearch/lite";
 import { IconDetails } from "./types";
 
-const client = algoliasearch("P1TXH7ZFB3", "0ba04276e457028f3e11e38696eab32c");
+const client = algoliasearch("P1TXH7ZFB3", "372f49b3eff864ccc6f268a82f1901cc");
 const index: SearchIndex = client.initIndex("macOSicons");
 
 export const COLUMNS = 6;

@@ -8,19 +8,19 @@ import { IconActions } from "./components/actions/icon-actions";
 import { GlobalActions } from "./components/actions/global-actions";
 
 export default function BrowseCommand() {
-  const { debouncedValue: searchQuery, setValue } = useDebounce("", 400);
+  const { debouncedValue: searchText, setValue } = useDebounce("", 400);
   const [page, setPage] = useState(0);
 
   const [fullData, setFullData] = useState<IconHit[]>([]);
 
   useEffect(() => {
     setPage(0);
-  }, [searchQuery]);
+  }, [searchText]);
 
   const { isLoading, data: lastPageResponse } = usePromise(
     async (searchQuery: string, page) =>
       page >= 0 ? fetchPage(searchQuery, page) : null,
-    [searchQuery, page],
+    [searchText, page],
     {
       onData: (data) => {
         if (data == null) return;
@@ -72,7 +72,7 @@ export default function BrowseCommand() {
           subtitle={`􀁸 ${icon.downloads}  􀉪 ${icon.usersName}`}
           actions={
             <ActionPanel>
-              <IconActions icon={icon} />
+              <IconActions searchText={searchText} icon={icon} />
               <GlobalActions />
             </ActionPanel>
           }
