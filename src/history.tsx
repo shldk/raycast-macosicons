@@ -9,7 +9,7 @@ import {COLUMNS} from "./api";
 function formatDate(dateString: string) {
 	const date = new Date(dateString);
 
-	return `􀧞 ${date.toLocaleDateString(undefined, {
+	return `${date.toLocaleDateString(undefined, {
 		day: "2-digit",
 		month: "short",
 	})}, ${date.toLocaleTimeString(undefined, {
@@ -25,7 +25,7 @@ export default function HistoryCommand() {
 		isLoading,
 		revalidate,
 	} = usePromise(DB.getHistory);
-	const {data: allApps} = usePromise(getApplications);
+	const { data: allApps } = usePromise(getApplications);
 	const [searchText, setSearchText] = useState("");
 
 	const availableApps = allApps
@@ -34,15 +34,13 @@ export default function HistoryCommand() {
 			a.name.toLocaleLowerCase().localeCompare(b.name.toLocaleLowerCase()),
 		);
 
-  console.log(searchText);
-
-  const filteredApps = availableApps?.filter(app => app.name.toLowerCase().includes(searchText.toLowerCase()));
+	const filteredApps = availableApps?.filter(app => app.name.toLowerCase().includes(searchText.toLowerCase()));
 
 	return (
-		<Grid columns={COLUMNS} 
-          inset={Grid.Inset.Small} 
-          isLoading={isLoading} 
-          onSearchTextChange={setSearchText} 
+		<Grid columns={COLUMNS}
+          inset={Grid.Inset.Small}
+          isLoading={isLoading}
+          onSearchTextChange={setSearchText}
           filtering={false}>
 			{(filteredApps ?? []).map((app) => (
 				<Grid.Section title={app.name} key={app.bundleId}>
@@ -52,8 +50,8 @@ export default function HistoryCommand() {
 								source: icon.lowResPngUrl,
 								fallback: Icon.DeleteDocument,
 							}}
-							title={formatDate(icon.date)}
-							subtitle={`${icon.appName}`}
+							title={`${icon.appName}`}
+							subtitle={formatDate(icon.date)}
 							key={icon.date}
 							actions={
 								<ActionPanel>

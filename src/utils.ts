@@ -25,7 +25,6 @@ export async function setMacOSIcon(appPath: string, imagePath: string) {
           Rez -append /tmp/icns.rsrc -o "$droplet"$'/Icon\r'
           SetFile -a C "$droplet"
           SetFile -a V "$droplet"$'/Icon\r'
-          killall Dock
         }; replace_icon '${appPath}' '${imagePath}'
       `,
 				(error: unknown, stdout: string) => {
@@ -43,24 +42,26 @@ export async function setMacOSIcon(appPath: string, imagePath: string) {
 }
 
 export function useApplications() {
-	return usePromise(async () => {
-    const {stdout} = await run(`mdfind -onlyin ~/Applications -onlyin /Applications 'kMDItemContentType == "com.apple.application-bundle" && kMDItemAppStoreIsAppleSigned != 1' -attr kMDItemFSName -attr kMDItemCFBundleIdentifier -attr kMDItemContentModificationDate`);
+	return usePromise(getApplications);
+}
 
-		return stdout.trim().split('\n').map(line => {
-			const parts = line.split('  ');
+export async function getApplications() {
+	const {stdout} = await run(`mdfind -onlyin ~/Applications -onlyin /Applications 'kMDItemContentType == "com.apple.application-bundle" && kMDItemAppStoreIsAppleSigned != 1' -attr kMDItemFSName -attr kMDItemCFBundleIdentifier -attr kMDItemContentModificationDate`);
 
-			const name = parts[1]?.split('=')[1].replace('.app', '').trim();
-			const bundleId = parts[2]?.split('=')[1].trim();
-			const lastModified = parts[3]?.split('=')[1].trim();
-			const path = parts[0];
-			return {
-				path,
-				name,
-				bundleId,
-				lastModified: new Date(lastModified)
-			} as Application
-		});
-  });
+	return stdout.trim().split('\n').map(line => {
+		const parts = line.split('  ');
+
+		const name = parts[1]?.split('=')[1].replace('.app', '').trim();
+		const bundleId = parts[2]?.split('=')[1].trim();
+		const lastModified = parts[3]?.split('=')[1].trim();
+		const path = parts[0];
+		return {
+			path,
+			name,
+			bundleId,
+			lastModified: new Date(lastModified)
+		} as Application
+	});
 }
 
 export function useSortedApplications(search?: string) {
@@ -68,8 +69,6 @@ export function useSortedApplications(search?: string) {
 
 	const results = fuzzysort.go(search || '', applications || [], {key: 'name'});
 	const objects = results.map(r => r.obj);
-
-	console.log(applications);
 
 	const otherApplications = (applications || []).filter(app => !objects.includes(app))
 

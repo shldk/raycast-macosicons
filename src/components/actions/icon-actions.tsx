@@ -13,8 +13,8 @@ import {DB} from "../../db";
 
 export type ActionProps = { icon: IconHit, searchText?: string };
 
-const SetApplicationIcon = ({icon, searchText}: ActionProps) => {
-	const {data: applications} = useSortedApplications(searchText);
+const SetApplicationIcon = ({ icon, searchText }: ActionProps) => {
+	const { data: applications } = useSortedApplications(searchText);
 
 	const update = async (app: Application) => {
 		const toast = await showToast({
@@ -30,9 +30,10 @@ const SetApplicationIcon = ({icon, searchText}: ActionProps) => {
 			});
 
 			toast.style = Toast.Style.Success;
-			toast.title = `${app.name} updated, might've caused screen to flicker once`;
+			toast.title = "Icon successfully updated";
+			toast.message = `Relaunch ${app.name} to see changes`;
 		} catch (e) {
-				
+
 			toast.style = Toast.Style.Failure;
 
 			toast.title = e?.toString() ?? "Something went wrong";
@@ -40,11 +41,11 @@ const SetApplicationIcon = ({icon, searchText}: ActionProps) => {
 	};
 
 	return (
-		<ActionPanel.Submenu title="Set Application Icon" icon={Icon.Highlight}>
+		<ActionPanel.Submenu title="Set Icon" icon={Icon.Highlight}>
 			{(applications ?? []).map((app) => {
 				return (
 					<Action
-						icon={{fileIcon: app.path}}
+						icon={{ fileIcon: app.path }}
 						title={app.name}
 						onAction={() => update(app)}
 						key={app.bundleId}
@@ -55,23 +56,23 @@ const SetApplicationIcon = ({icon, searchText}: ActionProps) => {
 	);
 };
 
-const SaveUsingBrowser = ({icon}: ActionProps) => (
+const SaveUsingBrowser = ({ icon }: ActionProps) => (
 	<Action.Open
-		title="Open(Save) Using Browser"
+		title="Download Icon"
 		target={icon.icnsUrl ?? ""}
 		icon={Icon.Download}
 	/>
 );
 
-const CopyURLToClipboard = ({icon}: ActionProps) => (
+const CopyURLToClipboard = ({ icon }: ActionProps) => (
 	<Action.CopyToClipboard
 		title="Copy URL to Clipboard"
-		content={{html: icon.icnsUrl ?? icon.appName}}
-		shortcut={{modifiers: ["cmd", "shift"], key: "c"}}
+		content={{ html: icon.icnsUrl ?? icon.appName }}
+		shortcut={{ modifiers: ["cmd", "shift"], key: "c" }}
 	></Action.CopyToClipboard>
 );
 
-export const IconActions = ({icon, searchText}: ActionProps) => (
+export const IconActions = ({ icon, searchText }: ActionProps) => (
 	<ActionPanel.Section>
 		<SetApplicationIcon icon={icon} searchText={searchText}/>
 		<SaveUsingBrowser icon={icon}/>
