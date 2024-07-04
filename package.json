@@ -13,20 +13,20 @@
   "commands": [
     {
       "name": "browse",
-      "title": "Change Icon",
+      "title": "Browse Custom Icons",
       "description": "Change icon for an application",
       "mode": "view"
     },
     {
       "name": "history",
-      "title": "Show History",
+      "title": "Show Icon History",
       "description": "Show icon change history",
       "mode": "view",
       "icon": "history-icon.png"
     },
     {
       "name": "restore",
-      "title": "Restore Icons",
+      "title": "Restore Custom Icons",
       "description": "Restore custom icons after application updates",
       "mode": "no-view"
     }

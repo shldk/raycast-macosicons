@@ -25,6 +25,7 @@ export async function setMacOSIcon(appPath: string, imagePath: string) {
           Rez -append /tmp/icns.rsrc -o "$droplet"$'/Icon\r'
           SetFile -a C "$droplet"
           SetFile -a V "$droplet"$'/Icon\r'
+          killall Dock
         }; replace_icon '${appPath}' '${imagePath}'
       `,
 				(error: unknown, stdout: string) => {
