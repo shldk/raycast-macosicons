@@ -7,16 +7,16 @@ import {
   Toast,
 } from "@raycast/api";
 import React from "react";
-import { IconStorageItem } from "../../types";
-import { DB } from "../../db";
+import { IconDetails } from "../../types.ts";
+import { History } from "../../history.ts";
 
 export type ActionProps = {
-  bundleId: string;
-  icon: IconStorageItem;
+  appName: string;
+  icon: IconDetails;
   onDeleted: () => Promise<unknown>;
 };
 
-const RemoveHistoryItem = ({ icon, onDeleted, bundleId }: ActionProps) => {
+const RemoveHistoryItem = ({ icon, onDeleted }: ActionProps) => {
   const remove = async () => {
     const toast = await showToast({
       style: Toast.Style.Animated,
@@ -24,7 +24,7 @@ const RemoveHistoryItem = ({ icon, onDeleted, bundleId }: ActionProps) => {
     });
 
     try {
-      await DB.removeFromHistory(bundleId, icon);
+      await History.removeIcon(icon);
 
       onDeleted();
 
@@ -36,6 +36,7 @@ const RemoveHistoryItem = ({ icon, onDeleted, bundleId }: ActionProps) => {
       toast.title = e?.toString() ?? "Something went wrong";
     }
   };
+
   return (
     <Action
       shortcut={Keyboard.Shortcut.Common.Remove}
@@ -48,14 +49,14 @@ const RemoveHistoryItem = ({ icon, onDeleted, bundleId }: ActionProps) => {
 
 export const HistoryActions = ({
   icon,
-  bundleId,
+  appName,
   revalidate,
 }: {
-  icon: IconStorageItem;
-  bundleId: string;
+  icon: IconDetails;
+  appName: string;
   revalidate: () => Promise<unknown>;
 }) => (
   <ActionPanel.Section>
-    <RemoveHistoryItem bundleId={bundleId} icon={icon} onDeleted={revalidate} />
+    <RemoveHistoryItem appName={appName} icon={icon} onDeleted={revalidate} />
   </ActionPanel.Section>
 );

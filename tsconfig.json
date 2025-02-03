@@ -3,9 +3,11 @@
   "display": "Node 18",
   "include": ["src/**/*", "raycast-env.d.ts"],
   "compilerOptions": {
-    "lib": ["es2021"],
-    "module": "commonjs",
-    "target": "es2021",
+    "lib": ["ESNext"],
+    "module": "NodeNext",
+    "target": "ESNext",
+    "moduleResolution": "nodenext",
+    "allowImportingTsExtensions": true,
     "strict": true,
     "isolatedModules": true,
     "esModuleInterop": true,
@@ -15,3 +17,5 @@
     "resolveJsonModule": true
   }
 }
+
+

@@ -4,6 +4,7 @@
   "title": "MacOSIcons.com",
   "description": "Raycast extension for browsing and applying icons from macOSicons.com",
   "icon": "main-icon.png",
+  "type": "module",
   "author": "shldk",
   "categories": [
     "System",
@@ -12,38 +13,43 @@
   "license": "MIT",
   "commands": [
     {
-      "name": "browse",
-      "title": "Browse Custom Icons",
-      "description": "Change icon for an application",
+      "name": "explore-icons",
+      "title": "Explore Icons",
+      "description": "Explore icons on macOSIcons.com",
       "mode": "view"
     },
     {
-      "name": "history",
-      "title": "Show Icon History",
-      "description": "Show icon change history",
+      "name": "icon-history",
+      "title": "Icon History",
+      "description": "Show icon history",
       "mode": "view",
       "icon": "history-icon.png"
     },
     {
-      "name": "restore",
-      "title": "Restore Custom Icons",
-      "description": "Restore custom icons after application updates",
+      "name": "restore-default-icon",
+      "title": "Restore Default Icon",
+      "description": "Restore application's default ccon",
+      "mode": "view"
+    },
+    {
+      "name": "fix-outdated-icons",
+      "title": "Fix Outdated Icons",
+      "description": "Fix outdated icons after updates",
       "mode": "no-view"
     }
   ],
   "dependencies": {
-    "@raycast/api": "^1.63.0",
-    "@raycast/utils": "^1.10.1",
-    "algoliasearch": "^4.20.0",
-    "fuzzysort": "^3.0.1"
+    "@raycast/api": "^1.89.1",
+    "@raycast/utils": "^1.18.1",
+    "fuzzysort": "^3.1.0",
+    "got": "^14.4.5"
   },
   "devDependencies": {
-    "@raycast/eslint-config": "^1.0.8",
-    "@types/node": "^20.9.0",
-    "@types/react": "18.2.27",
-    "eslint": "^8.51.0",
-    "react-devtools": "^4.28.4",
-    "typescript": "^5.3.3"
+    "@raycast/eslint-config": "^1.0.11",
+    "@types/node": "^20.8.10",
+    "@types/react": "^18.3.18",
+    "eslint": "^8.57.1",
+    "typescript": "^5.6.3"
   },
   "scripts": {
     "build": "ray build -e dist",

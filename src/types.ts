@@ -1,20 +1,30 @@
-import { Hit } from "@algolia/client-search";
-
 export type IconDetails = {
-  appName: string;
-  lowResPngUrl: string;
-  iOSUrl?: string;
-  icnsUrl: string;
-  approved: boolean;
-  downloads: number;
   timeStamp: number;
+  icnsUrl: string;
+  downloads: number;
   usersName: string;
+  category: string;
+  lowResPngUrl: string;
+  uploadedBy: string;
+  objectID: string;
+  iOSUrl: string;
+  name: string;
 };
 
-export type IconHit = Hit<IconDetails>;
+export type AppliedIconDetails = IconDetails & {
+  appPath: string;
+};
 
-export type IconStorageItem = IconHit & {
-  date: string;
-  // icnsLocalPath: string,
-  // lowResPngLocalPath: string
+export type SearchData = {
+  hits: Array<IconDetails>;
+  hitsPerPage: number;
+  totalHits: number;
+  totalDocuments: number;
+  query: string;
+  totalPages: number;
+  page: number;
+};
+
+export type SearchResponse = Omit<SearchData, "hits"> & {
+  hits: Array<Omit<IconDetails, "name"> & { appName: string }>;
 };
