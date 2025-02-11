@@ -24,7 +24,7 @@ export default function RestoreDefaultIconCommand() {
         apps.add(detail.application);
         return apps;
       }, new Set<Application>()),
-    );
+    ).filter(app => !!app);
   });
 
   const restore = useCallback(async (app: Application) => {
