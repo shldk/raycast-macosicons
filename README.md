@@ -2,31 +2,40 @@
 
 Raycast extension for browsing and applying icons from [macOSicons.com](https://macosicons.com)
 
-#### `Icons Browser`
+## Getting Started
 
-![home.jpeg](home.jpeg)
+To use this extension, you'll need an API key from macOSicons.com:
 
-The process of updating an icon for the app is very easy:
+1. Visit [macOSicons API Management](https://docs.macosicons.com/api-management)
+2. Follow the instructions to create an account or log in to an existing one
+3. Copy the API key
 
-1. When you find an icon you like, select it, press `return` _(or select the first item from "Actions" menu)_
+Install the extension. The first time you run the `Search Icons` command, it will prompt you for your API key.
 
-2. Select the application you want to change the icon for
-![choose-app.jpeg](choose-app.jpeg)
+#### `Search Icons`
 
-3. And _viola,_ your new icon is immediately applied system-wide!
-![dock.png](dock.png)
+![search.png](media/search.png)
 
-> Due to limitations of macOS, everytime an application gets an update, the icon will be reverted to default one, but don't worry, I'm already working on fixing that ;)
+Updating an application's icon is straightforward:
 
-#### `Icons History`
+1. Find an icon you like, select it, and press `Enter` (or choose the 'Apply Icon' action).
 
-This command will show you the history of all icon changes you made using the extension, grouped by app.
+2. Choose the application whose icon you want to change:
+   ![apply.png](media/apply.png)
 
-Play and experiment right there without the need to switch between history and browser.
+3. And voilà! Your new icon is applied.
+   ![dock.png](media/dock.png)
 
-![history.jpeg](history.jpeg)
+> [!NOTE]
+> Due to macOS limitations, application updates will revert the icon to its default. A fix for this is currently under development.
 
-**Big thanks to [macOSicons.com](https://macosicons.com) for having such a great product out there for free! <3**
+#### `Manage Icons`
 
-> _P.S. if you have any questions, or you found my usage of any available resources wrong or possibly inappropriate,
-please let me know right away!_
+This command displays previously applied icons, allowing you to easily switch between them or revert to the default icon.
+
+![manage.png](media/manage.png)
+_Experiment here to see which icons look best in your setup._
+
+**A big thank you to [macOSicons.com](https://macosicons.com) for their fantastic product!**
+
+> _P.S. If you have any questions or concerns about the use of resources, please feel free to reach out._

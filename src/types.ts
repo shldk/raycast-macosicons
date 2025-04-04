@@ -1,30 +1,27 @@
-export type IconDetails = {
-  timeStamp: number;
-  icnsUrl: string;
-  downloads: number;
-  usersName: string;
-  category: string;
-  lowResPngUrl: string;
-  uploadedBy: string;
-  objectID: string;
-  iOSUrl: string;
-  name: string;
+export type SearchIcon = {
+	objectID: string;
+	appName: string;
+	timeStamp: number;
+	icnsUrl: string;
+	downloads: number;
+	usersName: string;
+	category: string;
+	lowResPngUrl: string;
+	uploadedBy: string;
 };
 
-export type AppliedIconDetails = IconDetails & {
-  appPath: string;
+export type IconMetadata = Omit<SearchIcon, "appName" | "timeStamp"> & {
+	name: string;
+	uploadedAt: number;
+	updatedAt: number;
 };
 
-export type SearchData = {
-  hits: Array<IconDetails>;
-  hitsPerPage: number;
-  totalHits: number;
-  totalDocuments: number;
-  query: string;
-  totalPages: number;
-  page: number;
-};
-
-export type SearchResponse = Omit<SearchData, "hits"> & {
-  hits: Array<Omit<IconDetails, "name"> & { appName: string }>;
+export type IconsResponse = {
+	hits: Array<IconMetadata>;
+	hitsPerPage: number;
+	totalHits: number;
+	totalDocuments: number;
+	query: string;
+	totalPages: number;
+	page: number;
 };
