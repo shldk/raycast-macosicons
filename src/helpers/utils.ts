@@ -1,5 +1,5 @@
 import { Application } from "@raycast/api";
-import { useCachedPromise } from "@raycast/utils";
+import { showFailureToast, useCachedPromise } from "@raycast/utils";
 import { exec } from "child_process";
 import fuzzysort from "fuzzysort";
 import { promisify } from "node:util";
@@ -8,25 +8,32 @@ import React, { useEffect, useState } from "react";
 export const execPromise = promisify(exec);
 
 async function getModifiableApplications() {
-  const { stdout } = await execPromise(
-    `mdfind -onlyin /Applications 'kMDItemContentType == "com.apple.application-bundle" && kMDItemAppStoreIsAppleSigned != 1' -attr kMDItemFSName -attr kMDItemCFBundleIdentifier`,
-  );
+  try {
+    const { stdout } = await execPromise(
+      `mdfind -onlyin /Applications 'kMDItemContentType == "com.apple.application-bundle" && kMDItemAppStoreIsAppleSigned != 1' -attr kMDItemFSName -attr kMDItemCFBundleIdentifier`,
+    );
 
-  return stdout
-    .trim()
-    .split("\n")
-    .map((line) => {
-      const parts = line.split("  ");
+    return stdout
+      .trim()
+      .split("\n")
+      .map((line) => {
+        const parts = line.split("  ");
 
-      const name = parts[1]?.split("=")[1].replace(".app", "").trim();
-      const bundleId = parts[2]?.split("=")[1].trim();
-      const path = parts[0];
-      return {
-        path,
-        name,
-        bundleId,
-      } as Application;
+        const name = parts[1]?.split("=")[1].replace(".app", "").trim();
+        const bundleId = parts[2]?.split("=")[1].trim();
+        const path = parts[0];
+        return {
+          path,
+          name,
+          bundleId,
+        } as Application;
+      });
+  } catch (error) {
+    showFailureToast(error, {
+      title: "Could not load applications from spotlight",
     });
+    return [];
+  }
 }
 
 export function useModifiableApplications(search?: string) {

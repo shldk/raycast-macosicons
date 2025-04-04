@@ -1,5 +1,6 @@
 import { Application, showToast, Toast } from "@raycast/api";
-import { runAppleScript } from "@raycast/utils";
+import { runAppleScript, showFailureToast } from "@raycast/utils";
+import path from "path";
 import { IconMetadata } from "../types.ts";
 import { Store } from "./store.ts";
 import { execPromise } from "./utils.ts";
@@ -12,31 +13,9 @@ export async function setIcon(app: Application, icon: IconMetadata | null) {
 
   try {
     if (!icon) {
-      await execPromise(
-        `xattr -d -r com.apple.FinderInfo "${app.path}" && rm -rf "${app.path}"$'/Icon\r'`,
-      );
-      await Store.unsetIcon(app);
+      await removeIcon(app);
     } else {
-      await execPromise(
-        `
-        replace_icon(){
-          droplet="$1"
-          icon="$2"
-          if [[ "$icon" =~ ^https?:// ]]; then
-              curl -sLo /tmp/icon "$icon"
-              icon=/tmp/icon
-          fi
-          rm -rf "$droplet"$'/Icon\r'
-          sips -i "$icon" >/dev/null
-          DeRez -only icns "$icon" > /tmp/icns.rsrc
-          Rez -append /tmp/icns.rsrc -o "$droplet"$'/Icon\r'
-          SetFile -a C "$droplet"
-          SetFile -a V "$droplet"$'/Icon\r'
-        }; replace_icon '${app.path}' '${icon.icnsUrl}'
-      `,
-      );
-
-      await Store.setIcon(app, icon);
+      await updateIcon(app, icon);
     }
 
     toast.style = Toast.Style.Success;
@@ -50,9 +29,8 @@ export async function setIcon(app: Application, icon: IconMetadata | null) {
         await relaunchApplication(app);
       },
     };
-  } catch (e) {
-    toast.style = Toast.Style.Failure;
-    toast.title = e?.toString() ?? "Something went wrong";
+  } catch (error) {
+    showFailureToast(error, { title: "Could not update icon" });
   }
 }
 
@@ -82,4 +60,30 @@ export async function clearDockCache() {
   return await execPromise(
     `find /private/var/folders/ -name com.apple.dock.iconcache -maxdepth 4 2>/dev/null | xargs rm && killall Dock`,
   );
+}
+
+async function updateIcon(app: Application, icon: IconMetadata) {
+  return Promise.all([
+    runAppleScript(
+      `
+			use framework "Foundation"
+			use scripting additions
+
+			set appPath to POSIX path of "${app.path}"
+			set iconURL to "${icon.icnsUrl}" as POSIX file
+			set image to current application's NSImage's alloc()'s initWithContentsOfURL:iconURL
+			set success to current application's NSWorkspace's sharedWorkspace's setIcon:image forFile:appPath options:0
+			`,
+    ),
+    Store.setIcon(app, icon),
+  ]);
+}
+
+async function removeIcon(app: Application) {
+  return Promise.all([
+    execPromise(
+      `xattr -d -r com.apple.FinderInfo "${app.path}" && rm ${path.join(app.path, "/Icon\r")}`,
+    ),
+    Store.unsetIcon(app),
+  ]);
 }
