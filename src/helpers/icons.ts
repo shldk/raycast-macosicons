@@ -5,20 +5,20 @@ import { Store } from "./store.ts";
 import { execPromise } from "./utils.ts";
 
 export async function setIcon(app: Application, icon: IconMetadata | null) {
-	const toast = await showToast({
-		style: Toast.Style.Animated,
-		title: `Updating icon...`,
-	});
+  const toast = await showToast({
+    style: Toast.Style.Animated,
+    title: `Updating icon...`,
+  });
 
-	try {
-		if (!icon) {
-			await execPromise(
-				`xattr -d -r com.apple.FinderInfo "${app.path}" && rm -rf "${app.path}"$'/Icon\r'`
-			);
-			await Store.unsetIcon(app);
-		} else {
-			await execPromise(
-				`
+  try {
+    if (!icon) {
+      await execPromise(
+        `xattr -d -r com.apple.FinderInfo "${app.path}" && rm -rf "${app.path}"$'/Icon\r'`,
+      );
+      await Store.unsetIcon(app);
+    } else {
+      await execPromise(
+        `
         replace_icon(){
           droplet="$1"
           icon="$2"
@@ -33,39 +33,39 @@ export async function setIcon(app: Application, icon: IconMetadata | null) {
           SetFile -a C "$droplet"
           SetFile -a V "$droplet"$'/Icon\r'
         }; replace_icon '${app.path}' '${icon.icnsUrl}'
-      `
-			);
+      `,
+      );
 
-			await Store.setIcon(app, icon);
-		}
+      await Store.setIcon(app, icon);
+    }
 
-		toast.style = Toast.Style.Success;
-		toast.title = "Changed icon";
-		toast.message = `Relaunch ${app.name} from dock to see changes`;
-		toast.primaryAction = {
-			title: `Clear Cache and Relaunch ${app.name}`,
-			shortcut: { modifiers: ["cmd", "shift"], key: "r" },
-			onAction: async () => {
-				await clearDockCache();
-				await relaunchApplication(app);
-			},
-		};
-	} catch (e) {
-		toast.style = Toast.Style.Failure;
-		toast.title = e?.toString() ?? "Something went wrong";
-	}
+    toast.style = Toast.Style.Success;
+    toast.title = "Changed icon";
+    toast.message = `Relaunch ${app.name} from dock to see changes`;
+    toast.primaryAction = {
+      title: `Clear Cache and Relaunch ${app.name}`,
+      shortcut: { modifiers: ["cmd", "shift"], key: "r" },
+      onAction: async () => {
+        await clearDockCache();
+        await relaunchApplication(app);
+      },
+    };
+  } catch (e) {
+    toast.style = Toast.Style.Failure;
+    toast.title = e?.toString() ?? "Something went wrong";
+  }
 }
 
 export async function getDefaultIconPath(app: Application) {
-	const { stdout } = await execPromise(
-		`defaults read '${app.path}/Contents/Info' CFBundleIconFile`
-	);
+  const { stdout } = await execPromise(
+    `defaults read '${app.path}/Contents/Info' CFBundleIconFile`,
+  );
 
-	return `${app.path}/Contents/Resources/${stdout.trim()}`;
+  return `${app.path}/Contents/Resources/${stdout.trim()}`;
 }
 
 export async function relaunchApplication(app: Application) {
-	return await runAppleScript(`
+  return await runAppleScript(`
 		tell application "${app.name}"
 			if its running then
 				quit
@@ -79,7 +79,7 @@ export async function relaunchApplication(app: Application) {
 }
 
 export async function clearDockCache() {
-	return await execPromise(
-		`find /private/var/folders/ -name com.apple.dock.iconcache -maxdepth 4 2>/dev/null | xargs rm && killall Dock`
-	);
+  return await execPromise(
+    `find /private/var/folders/ -name com.apple.dock.iconcache -maxdepth 4 2>/dev/null | xargs rm && killall Dock`,
+  );
 }
