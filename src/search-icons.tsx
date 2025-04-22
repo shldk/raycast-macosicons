@@ -6,7 +6,6 @@ import {
   openCommandPreferences,
 } from "@raycast/api";
 import { showFailureToast, useCachedPromise, usePromise } from "@raycast/utils";
-import { useRef } from "react";
 import { IconActions } from "./components/icon-actions.tsx";
 import { search } from "./helpers/api.ts";
 import { Store } from "./helpers/store.ts";
@@ -20,7 +19,6 @@ export default function SearchIconsCommand() {
   );
 
   const { debouncedValue: searchText, setValue } = useDebounce("", 400);
-  const abortable = useRef<AbortController>();
 
   const { isLoading, data, pagination } = useCachedPromise(
     (searchText: string) => async (options: { page: number }) => {
@@ -48,7 +46,6 @@ export default function SearchIconsCommand() {
     },
     [searchText],
     {
-      abortable,
       keepPreviousData: true,
     },
   );
@@ -72,7 +69,7 @@ export default function SearchIconsCommand() {
             fallback: Icon.DeleteDocument,
           }}
           title={icon.name}
-          subtitle={`􀁸 ${icon.downloads}  􀉩 ${icon.usersName}`}
+          subtitle={`⤓ ${icon.downloads}  @ ${icon.usersName}`}
           accessory={
             favorites?.find((f) => f.objectID === icon.objectID)
               ? {
